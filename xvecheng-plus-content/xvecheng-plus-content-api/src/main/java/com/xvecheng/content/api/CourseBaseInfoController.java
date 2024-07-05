@@ -4,8 +4,10 @@ import com.xvecheng.base.model.PageParams;
 import com.xvecheng.base.model.PageResult;
 import com.xvecheng.content.model.dto.QueryCourseParamsDto;
 import com.xvecheng.content.model.po.CourseBase;
+import com.xvecheng.content.service.CourseBaseInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,20 +20,19 @@ import java.util.List;
 @RestController //相当于controller 和 responseBody的整合
 public class CourseBaseInfoController {
 
+    @Autowired
+    CourseBaseInfoService courseBaseInfoService;
+
     //@PostMapping
     //@RequestMapping("/course/list")
     @ApiOperation("课程查询接口")
     @PostMapping("/course/list")
     public PageResult<CourseBase> list(PageParams pageParams, @RequestBody(required = false) QueryCourseParamsDto queryCourseParamsDto){
 
+        PageResult<CourseBase> courseBasePageResult = courseBaseInfoService.queryCourseBaseList(pageParams, queryCourseParamsDto);
 
-        CourseBase courseBase = new CourseBase();
-        courseBase.setName("测试名称");
-        courseBase.setCreateDate(LocalDateTime.now());
-        List<CourseBase> courseBases = new ArrayList();
-        courseBases.add(courseBase);
-        PageResult pageResult = new PageResult<CourseBase>(courseBases,10,1,10);
-        return pageResult;
+
+        return courseBasePageResult;
 
     }
 
